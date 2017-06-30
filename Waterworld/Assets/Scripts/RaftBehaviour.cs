@@ -142,8 +142,8 @@ public class Vec2i
 
     public Vec2i()
     {
-     X = 0;
-     Y = 0;
+        X = 0;
+        Y = 0;
     }
 
     public Vec2i(int _x, int _y)
