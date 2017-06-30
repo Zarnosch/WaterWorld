@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum Building {
-	Fisherman,
+	Fisherman = 1,
 	RainCapture,
 	SeawaterPurification,
 	MusselFarm,
