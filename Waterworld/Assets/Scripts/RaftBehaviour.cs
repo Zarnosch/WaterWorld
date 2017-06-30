@@ -59,6 +59,29 @@ public class RaftBehaviour : MonoBehaviour {
         }
     }
 
+    public bool Build(Vec2i _buildPosition, Building _building)
+    {
+        if(_buildPosition.X >= 0 && _buildPosition.X < RaftMaxGridSize.X && _buildPosition.Y >= 0 && _buildPosition.Y < RaftMaxGridSize.Y)
+        {
+            if(_building == Building.Raft && RaftGridInfo[_buildPosition.X, _buildPosition.Y] == -1)
+            {
+                RaftGridInfo[_buildPosition.X, _buildPosition.Y] = (int)_building;
+                // TODO: Instantiate Raft tile
+                return true;
+            }
+            if(RaftGridInfo[_buildPosition.X, _buildPosition.Y] == 0)
+            {
+                RaftGridInfo[_buildPosition.X, _buildPosition.Y] = (int)_building;
+                // TODO: Instantiate Building here
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+
+
     public Vec2i LightMapPosToHeightmap(Vector2 lightMapPos)
     {
         int x = (int)Mathf.Round(lightMapPos.x * RaftMaxGridSize.X);
