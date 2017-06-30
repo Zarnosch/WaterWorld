@@ -24,8 +24,8 @@ public class CameraMouseMovement : MonoBehaviour {
 		if (mousePos.y > 0 && mousePos.y < MovementZone) {
 			transform.position = new Vector3(
 				transform.position.x, 
-				transform.position.y - MoveOffset, 
-				transform.position.z);
+				transform.position.y, 
+				transform.position.z - MoveOffset);
 		}
 
 		// rigth
@@ -40,8 +40,8 @@ public class CameraMouseMovement : MonoBehaviour {
 		if (mousePos.y > Screen.height - MovementZone && mousePos.y < Screen.height) {
 			transform.position = new Vector3(
 				transform.position.x, 
-				transform.position.y + MoveOffset, 
-				transform.position.z);
+				transform.position.y, 
+				transform.position.z + MoveOffset);
 		}
 	}
 }
