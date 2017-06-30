@@ -3,6 +3,9 @@
 // https://stackoverflow.com/documentation/unity3d/2137/singletons-in-unity/9564/implementation-using-runtimeinitializeonloadmethodattribute#t=201701211257540950256
 sealed class GameManager : MonoBehaviour {
 
+    [System.NonSerialized]
+    public Builder Builder;
+
     // Because of using RuntimeInitializeOnLoadMethod attribute to find/create and
     // initialize the instance, this property is accessible and
     // usable even in Awake() methods.
@@ -28,6 +31,6 @@ sealed class GameManager : MonoBehaviour {
     // in the OnRuntimeMethodLoad(). In other words, before any other MonoBehaviour's
     // in the scene will begin to initialize.
     private void Awake() {
-		
+		Builder = GetComponent<Builder>();
     }
 }
