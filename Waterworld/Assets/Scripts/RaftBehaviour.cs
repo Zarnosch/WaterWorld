@@ -16,7 +16,7 @@ public class RaftBehaviour : MonoBehaviour {
     private GameManager _gm;
 
     private int[,] _raftGrid;
-    private int[,] _occupied; // -1 not there, 0 = free, [1-11] building
+    public int[,] RaftGridInfo; // -1 not there, 0 = free, [1-11] building
     public Mesh RaftMesh;
 
     //public Material RaftMaterial;
@@ -25,7 +25,7 @@ public class RaftBehaviour : MonoBehaviour {
     {
         _gm = GetComponent<GameManager>();
         _raftGrid = new int[RaftMaxGridSize.X, RaftMaxGridSize.Y];
-        _occupied = new int[RaftMaxGridSize.X, RaftMaxGridSize.Y];
+        RaftGridInfo = new int[RaftMaxGridSize.X, RaftMaxGridSize.Y];
     }
 
 	// Use this for initialization
@@ -57,6 +57,13 @@ public class RaftBehaviour : MonoBehaviour {
             //    }
             //}
         }
+    }
+
+    public Vec2i LightMapPosToHeightmap(Vector2 lightMapPos)
+    {
+        int x = (int)Mathf.Round(lightMapPos.x * RaftMaxGridSize.X);
+        int y = (int)Mathf.Round(lightMapPos.y * RaftMaxGridSize.Y);
+        return new Vec2i(x, y);
     }
 
     private void createRaftMesh()
