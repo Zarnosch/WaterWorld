@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum Building {
+	Raft,
 	Fisherman,
 	RainCapture,
 	SeawaterPurification,
