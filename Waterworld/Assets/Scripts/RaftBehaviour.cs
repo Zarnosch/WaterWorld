@@ -13,9 +13,6 @@ public class RaftBehaviour : MonoBehaviour {
     private List<Vector2> _uv;
     private List<int> _triangles;
 
-    private GameManager _gm;
-
-    private int[,] _raftGrid;
     public int[,] RaftGridInfo; // -1 not there, 0 = free, [1-11] building
     public Mesh RaftMesh;
 
@@ -23,8 +20,6 @@ public class RaftBehaviour : MonoBehaviour {
 
     void Awake ()
     {
-        _gm = GetComponent<GameManager>();
-        _raftGrid = new int[RaftMaxGridSize.X, RaftMaxGridSize.Y];
         RaftGridInfo = new int[RaftMaxGridSize.X, RaftMaxGridSize.Y];
     }
 
