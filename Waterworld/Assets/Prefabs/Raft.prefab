@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1710866615512266}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -111,7 +111,11 @@ MonoBehaviour:
   RaftMaxGridSize:
     X: 8
     Y: 8
+  RaftStartSize:
+    X: 2
+    Y: 2
   RaftMesh: {fileID: 0}
+  _buildTexture: {fileID: 0}
 --- !u!114 &114795906527929416
 MonoBehaviour:
   m_ObjectHideFlags: 1
