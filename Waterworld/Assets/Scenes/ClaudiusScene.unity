@@ -189,6 +189,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61fa9334438c040e3b9c4ac6c4203d8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ResourcesUI: {fileID: 1586419372}
+  ResourceRecieveSpeed: 5
 --- !u!114 &141735378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,11 +354,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114021614658856216, guid: 34c7a4820f6674693a698806540dc7cf,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 224684669641947752, guid: 34c7a4820f6674693a698806540dc7cf,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -447,6 +444,11 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114021614658856216, guid: 34c7a4820f6674693a698806540dc7cf,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1049975816}
     - target: {fileID: 114945269627291548, guid: 34c7a4820f6674693a698806540dc7cf,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -507,31 +509,6 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 413238903}
-    - target: {fileID: 114021614658856216, guid: 34c7a4820f6674693a698806540dc7cf,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114021614658856216, guid: 34c7a4820f6674693a698806540dc7cf,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114021614658856216, guid: 34c7a4820f6674693a698806540dc7cf,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1049975816}
-    - target: {fileID: 114021614658856216, guid: 34c7a4820f6674693a698806540dc7cf,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: UpgradeBuilding
-      objectReference: {fileID: 0}
-    - target: {fileID: 114021614658856216, guid: 34c7a4820f6674693a698806540dc7cf,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 34c7a4820f6674693a698806540dc7cf, type: 2}
   m_IsPrefabParent: 0
@@ -638,6 +615,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MovementZone: 150
   MoveOffset: 0.15
+--- !u!1 &1586419372 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1760898836586498, guid: 34c7a4820f6674693a698806540dc7cf,
+    type: 2}
+  m_PrefabInternal: {fileID: 1213711928}
 --- !u!114 &1785614907 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114633758261613992, guid: c2344dfd995435643b76b54dab2b8208,
