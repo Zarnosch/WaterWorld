@@ -9,15 +9,19 @@ public class UI : MonoBehaviour {
 
 	private Text _panelTitel;
 
+	[System.NonSerialized]
+	public BuildingType SelectedBuilding;
+
 	void Awake() {
 		_panelTitel = UpgradePanel.GetComponentInChildren<Text>();
 	}
 
-    public void ToggleUpgradeUI(string _buildingName) {
+    public void ToggleUpgradeUI(BuildingType _building) {
 		UpgradePanel.gameObject.SetActive(!UpgradePanel.gameObject.activeInHierarchy);
 		
 		if (UpgradePanel.gameObject.activeInHierarchy) {
-			_panelTitel.text = _buildingName;
+			SelectedBuilding = _building;
+			_panelTitel.text = SelectedBuilding.Type.ToString();
 		}
     }
 }

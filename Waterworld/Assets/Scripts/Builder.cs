@@ -89,4 +89,8 @@ public class Builder : MonoBehaviour {
 				break;
 		}
 	}
+
+	public void Upgrade(BuildingType _building) {
+		Debug.Log("TODO " + _building.Type.ToString());
+	}
 }

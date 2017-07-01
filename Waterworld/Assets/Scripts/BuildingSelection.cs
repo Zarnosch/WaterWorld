@@ -17,17 +17,17 @@ public class BuildingSelection : MonoBehaviour {
 		// nothing hit
 		if (hit.distance == 0) { return; }
 
-		Building type = Building.NONE;
+		BuildingType type = null;
 		try {
-			type = hit.transform.gameObject.GetComponent<BuildingType>().Type;
+			type = hit.transform.gameObject.GetComponent<BuildingType>();
 		} catch (System.NullReferenceException _e) {
 			Debug.Log("Selecting building without 'BuildingType' something went wrong.");
 			Debug.Log(_e.StackTrace);
 			return;
 		}
 
-        if (type == Building.Raft || type == Building.NONE) { return; }
+        if (type == null || type.Type == Building.Raft) { return; }
 
-        GameManager.Instance.UI.ToggleUpgradeUI(type.ToString());
+        GameManager.Instance.UI.ToggleUpgradeUI(type);
 	}
 }
