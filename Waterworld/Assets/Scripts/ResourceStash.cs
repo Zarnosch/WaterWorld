@@ -20,8 +20,10 @@ public class ResourceStash : MonoBehaviour {
 	private Dictionary<Building, Dictionary<Resource, int>> ResourcesPerBuilding;
 	private Dictionary<Building, float> UpgradeAmountPerBuilding;
 
-	public float ResourceRecieveSpeed = 5.0f;
+	public float ResourceRecieveSpeed = 2.5f;
 	private float _counter;
+
+	private Dictionary<Resource, int> _resourcesLostPerPerson;
 
 	void Awake() {
 		Resources = new Dictionary<Resource, int> {
@@ -57,6 +59,11 @@ public class ResourceStash : MonoBehaviour {
 			{ Building.Sail,                 1.0f },
 			{ Building.SeaweedFarm,          1.0f },
 			{ Building.SeawaterPurification, 1.0f }
+		};
+
+		_resourcesLostPerPerson = new Dictionary<Resource, int> {
+			{ Resource.Nutriment, 1 },
+			{ Resource.Water,     1 },
 		};
 
 		updateUI();
@@ -134,7 +141,7 @@ public class ResourceStash : MonoBehaviour {
 
 			var adds = ResourcesPerBuilding[building];
 
-			for (var i = 0; i < amount; i++) {
+			for (int i = 0; i < amount; i++) {
 				foreach (var addition in adds) {
 					var resource = addition.Key;
 					var add      = addition.Value;
@@ -147,11 +154,23 @@ public class ResourceStash : MonoBehaviour {
 		updateUI();
 	}
 
+	private void looseResources() {
+		for (int i = 0; i < 10; i++) {
+			foreach (var noms in _resourcesLostPerPerson) {
+				var resource = noms.Key;
+				var amount   = noms.Value;
+
+				Resources[resource] -= amount;
+			}
+		}
+	}
+
 	void Update() {
 		_counter += 0.5f * Time.deltaTime;
 		if (_counter > ResourceRecieveSpeed) {
 			_counter = 0;
 
+			looseResources();
 			applyResources();
 		}
 	}

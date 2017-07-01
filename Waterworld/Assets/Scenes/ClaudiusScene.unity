@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ResourcesUI: {fileID: 1586419372}
-  ResourceRecieveSpeed: 5
+  ResourceRecieveSpeed: 2.5
 --- !u!114 &141735378
 MonoBehaviour:
   m_ObjectHideFlags: 0
