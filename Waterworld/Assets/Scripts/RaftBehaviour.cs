@@ -7,6 +7,7 @@ using UnityEngine;
 public class RaftBehaviour : MonoBehaviour {
 
     public Vec2i RaftMaxGridSize;
+    public Vec2i RaftStartSize;
 
 
     private List<Vector3> _vertices;
@@ -19,19 +20,37 @@ public class RaftBehaviour : MonoBehaviour {
     public int[,] RaftGridInfo; // -1 not there, 0 = free, [1-11] building
     public Mesh RaftMesh;
 
-    //public Material RaftMaterial;
+    private Shader _raftSurfaceShader;
+    private Material _raftSurfaceMaterial;
+
+    public Texture2D _buildTexture;
 
     void Awake ()
     {
         _gm = GetComponent<GameManager>();
         _raftGrid = new int[RaftMaxGridSize.X, RaftMaxGridSize.Y];
         RaftGridInfo = new int[RaftMaxGridSize.X, RaftMaxGridSize.Y];
+
+        _raftSurfaceShader = Shader.Find("Unlit/RaftUnlitShader");
+        if (_raftSurfaceShader == null)
+        {
+            UnityEngine.Debug.LogError("RaftUnlitShader could not be loaded!");
+        }
+        else
+        {
+            _raftSurfaceMaterial = new Material(_raftSurfaceShader);
+            GetComponent<MeshRenderer>().material = _raftSurfaceMaterial;
+        }
+        _buildTexture = new Texture2D(RaftMaxGridSize.X, RaftMaxGridSize.Y);
+        _raftSurfaceMaterial.SetInt("_ResX", RaftMaxGridSize.X);
+        _raftSurfaceMaterial.SetInt("_ResY", RaftMaxGridSize.Y);
     }
 
 	// Use this for initialization
 	void Start ()
     {
         createRaftMesh();
+        initTiles(RaftStartSize.X, RaftStartSize.Y);
     }
 	
 	// Update is called once per frame
@@ -66,6 +85,8 @@ public class RaftBehaviour : MonoBehaviour {
             if(_building == Building.Raft && RaftGridInfo[_buildPosition.X, _buildPosition.Y] == -1)
             {
                 RaftGridInfo[_buildPosition.X, _buildPosition.Y] = (int)_building;
+                _buildTexture.SetPixel(_buildPosition.X, _buildPosition.Y, new Color(1, 0, 0, 0));
+                _raftSurfaceMaterial.SetTexture("_Building", _buildTexture);
                 // TODO: Instantiate Raft tile
                 return true;
             }
@@ -87,6 +108,29 @@ public class RaftBehaviour : MonoBehaviour {
         int x = (int)Mathf.Round(lightMapPos.x * RaftMaxGridSize.X);
         int y = (int)Mathf.Round(lightMapPos.y * RaftMaxGridSize.Y);
         return new Vec2i(x, y);
+    }
+
+    private void initTiles(int _width, int _height)
+    {
+        Vec2i center = new Vec2i(RaftMaxGridSize.X / 2, RaftMaxGridSize.Y / 2);
+        for (int x = 0; x < RaftMaxGridSize.X; x++)
+        {
+            for (int y = 0; y < RaftMaxGridSize.Y; y++)
+            {
+                if (x == center.X && y == center.Y)
+                {
+                    RaftGridInfo[x, y] = 0;
+                    _buildTexture.SetPixel(x, y, new Color(1, 0, 0, 0));
+                }
+                else
+                {
+                    RaftGridInfo[x, y] = -1;
+                    _buildTexture.SetPixel(x, y, new Color(0, 0, 0, 0));
+                }
+            }
+        }
+        _buildTexture.Apply();
+        _raftSurfaceMaterial.SetTexture("_Building", _buildTexture);
     }
 
     private void createRaftMesh()
