@@ -36,7 +36,7 @@ public class ChunkBehaviour : MonoBehaviour {
                 //float u = (float)x / (TextureResolution - 1);
                 //float v = (float)y / (TextureResolution - 1);
                 //float w = 1;
-                tempColor = new Color(val, val, 1);
+                tempColor = new Color(val*val, val*val, 1);
                 NoiseTex.SetPixel(NoiseTex.width - x - 1, NoiseTex.width - y - 1, tempColor);
             }
         }
