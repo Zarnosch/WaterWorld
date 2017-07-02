@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 [RequireComponent(typeof(MeshCollider), typeof(MeshFilter), typeof(MeshRenderer))]
 public class RaftBehaviour : MonoBehaviour {
 
@@ -14,36 +13,14 @@ public class RaftBehaviour : MonoBehaviour {
     private List<Vector2> _uv;
     private List<int> _triangles;
 
-    private GameManager _gm;
-
-    private int[,] _raftGrid;
     public int[,] RaftGridInfo; // -1 not there, 0 = free, [1-11] building
     public Mesh RaftMesh;
 
-    private Shader _raftSurfaceShader;
-    private Material _raftSurfaceMaterial;
-
-    public Texture2D _buildTexture;
+    int raftGridInfo;
 
     void Awake ()
     {
-        _gm = GetComponent<GameManager>();
-        _raftGrid = new int[RaftMaxGridSize.X, RaftMaxGridSize.Y];
         RaftGridInfo = new int[RaftMaxGridSize.X, RaftMaxGridSize.Y];
-
-        _raftSurfaceShader = Shader.Find("Unlit/RaftUnlitShader");
-        if (_raftSurfaceShader == null)
-        {
-            UnityEngine.Debug.LogError("RaftUnlitShader could not be loaded!");
-        }
-        else
-        {
-            _raftSurfaceMaterial = new Material(_raftSurfaceShader);
-            GetComponent<MeshRenderer>().material = _raftSurfaceMaterial;
-        }
-        _buildTexture = new Texture2D(RaftMaxGridSize.X, RaftMaxGridSize.Y);
-        _raftSurfaceMaterial.SetInt("_ResX", RaftMaxGridSize.X);
-        _raftSurfaceMaterial.SetInt("_ResY", RaftMaxGridSize.Y);
     }
 
 	// Use this for initialization
@@ -52,86 +29,69 @@ public class RaftBehaviour : MonoBehaviour {
         createRaftMesh();
         initTiles(RaftStartSize.X, RaftStartSize.Y);
     }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		
-	}
-
-    //void OnRenderObject()
-    //{
-    //    //Graphics.DrawMesh(RaftMesh, transform.position, transform.rotation, RaftMaterial, 0, Camera.current, 0, new MaterialPropertyBlock(), true, true);
-    //}
-
-    void OnDrawGizmos()
-    {
-        if(_vertices != null)
-        {
-            //for (int x = 0; x < RaftMaxGridSize.X; x++)
-            //{
-            //    for (int y = 0; y < RaftMaxGridSize.Y; y++)
-            //    {
-            //        Gizmos.DrawSphere(_vertices[x + y * RaftMaxGridSize.Y], 0.3f);
-            //    }
-            //}
-        }
-    }
 
     public bool Build(Vec2i _buildPosition, Building _building)
     {
-        if(_buildPosition.X >= 0 && _buildPosition.X < RaftMaxGridSize.X && _buildPosition.Y >= 0 && _buildPosition.Y < RaftMaxGridSize.Y)
+        if (_buildPosition.X < 0 || _buildPosition.X > RaftMaxGridSize.X 
+            || _buildPosition.Y < 0 || _buildPosition.Y > RaftMaxGridSize.Y) 
         {
-            if(_building == Building.Raft && RaftGridInfo[_buildPosition.X, _buildPosition.Y] == -1)
-            {
-                RaftGridInfo[_buildPosition.X, _buildPosition.Y] = (int)_building;
-                _buildTexture.SetPixel(_buildPosition.X, _buildPosition.Y, new Color(1, 0, 0, 0));
-                _raftSurfaceMaterial.SetTexture("_Building", _buildTexture);
-                // TODO: Instantiate Raft tile
-                return true;
-            }
-            if(RaftGridInfo[_buildPosition.X, _buildPosition.Y] == 0)
-            {
-                RaftGridInfo[_buildPosition.X, _buildPosition.Y] = (int)_building;
-                // TODO: Instantiate Building here
-                return true;
-            }
+            Debug.Log(_buildPosition);
             return false;
         }
+        
+        raftGridInfo = RaftGridInfo[_buildPosition.X, _buildPosition.Y];
+
+        // if empty space build raft
+        if (_building == Building.Raft && raftGridInfo == -1) {
+            RaftGridInfo[_buildPosition.X, _buildPosition.Y] = (int)_building;
+            return true;
+        }
+
+        // if raft built building
+        if (raftGridInfo == 0) {
+            RaftGridInfo[_buildPosition.X, _buildPosition.Y] = (int)_building;
+            return true;
+        }
+        
         return false;
     }
 
-
-
     public Vec2i LightMapPosToHeightmap(Vector2 lightMapPos)
     {
-        int x = (int)Mathf.Round(lightMapPos.x * RaftMaxGridSize.X);
-        int y = (int)Mathf.Round(lightMapPos.y * RaftMaxGridSize.Y);
+        int x = (int) lightMapPos.x;
+        int y = (int) lightMapPos.y;
         return new Vec2i(x, y);
     }
 
-    private void initTiles(int _width, int _height)
-    {
-        Vec2i center = new Vec2i(RaftMaxGridSize.X / 2, RaftMaxGridSize.Y / 2);
-        for (int x = 0; x < RaftMaxGridSize.X; x++)
-        {
-            for (int y = 0; y < RaftMaxGridSize.Y; y++)
-            {
-                if (x == center.X && y == center.Y)
-                {
+    private void initTiles(int _width, int _height) {
+        for (int x = 0; x < RaftMaxGridSize.X; x++) {
+            for (int y = 0; y < RaftMaxGridSize.Y; y++) {
+                if (x <= _width && y <= _height) {
                     RaftGridInfo[x, y] = 0;
-                    _buildTexture.SetPixel(x, y, new Color(1, 0, 0, 0));
                 }
-                else
-                {
+                else {
                     RaftGridInfo[x, y] = -1;
-                    _buildTexture.SetPixel(x, y, new Color(0, 0, 0, 0));
                 }
             }
         }
-        _buildTexture.Apply();
-        _raftSurfaceMaterial.SetTexture("_Building", _buildTexture);
     }
+
+    void OnDrawGizmos() {
+        if (RaftGridInfo == null) { return; }
+		for (int x = 0; x < RaftGridInfo.GetLength(0); x++) {
+            for (int y = 0; y < RaftGridInfo.GetLength(1); y++) {
+                if (RaftGridInfo[x, y] == 0) {
+                    Gizmos.color = Color.yellow;
+		            Gizmos.DrawSphere(new Vector3(x, 3, y), 0.05f);
+                }
+
+                if (RaftGridInfo[x, y] > 0) {
+                    Gizmos.color = Color.red;
+		            Gizmos.DrawSphere(new Vector3(x, 3, y), 0.05f);
+                }
+            }
+        }		
+	}
 
     private void createRaftMesh()
     {
@@ -194,5 +154,9 @@ public class Vec2i
     {
         X = _x;
         Y = _y;
+    }
+
+    public override string ToString() {
+        return "[ " + X + ", " + Y + " ]";
     }
 }

@@ -4,7 +4,11 @@
 sealed class GameManager : MonoBehaviour {
 
     [System.NonSerialized]
-    public Builder Builder;
+    public Builder       Builder;
+    [System.NonSerialized]
+    public UI            UI;
+    [System.NonSerialized]
+    public ResourceStash ResourceStash;
 
     // Because of using RuntimeInitializeOnLoadMethod attribute to find/create and
     // initialize the instance, this property is accessible and
@@ -31,6 +35,12 @@ sealed class GameManager : MonoBehaviour {
     // in the OnRuntimeMethodLoad(). In other words, before any other MonoBehaviour's
     // in the scene will begin to initialize.
     private void Awake() {
-		Builder = GetComponent<Builder>();
+        try {
+            Builder       = GetComponent<Builder>();
+            UI            = GetComponent<UI>();
+            ResourceStash = GetComponent<ResourceStash>();
+        } catch {
+            Debug.LogError("Missing some component scripts on GameManager!");            
+        }
     }
 }
