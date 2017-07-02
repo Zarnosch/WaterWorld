@@ -34,7 +34,7 @@ public class WorldBehaviour : MonoBehaviour {
             {
                 _activeChunks[x, y] = Instantiate(ChunkTile) as GameObject;
                 _activeChunks[x, y].transform.SetParent(gameObject.transform);
-                _activeChunks[x, y].transform.position = new Vector3(x * transform.lossyScale.x * 10, -10, y * transform.lossyScale.z * 10);
+                _activeChunks[x, y].transform.position = new Vector3(x * transform.lossyScale.x * 10, transform.position.y, y * transform.lossyScale.z * 10);
                 _activeChunks[x, y].GetComponent<ChunkBehaviour>().CreateTexture(new Vec2i(x, y), ChunkResolution);
                 _activeChunks[x, y].SetActive(true);
                 _activeChunks[x, y].name = "(" + x + ", " + y + ")";
